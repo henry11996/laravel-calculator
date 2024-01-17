@@ -13,6 +13,7 @@ class Calculator
         protected string $divideSign = '/',
         protected string $leftParenthesis = '(',
         protected string $rightParenthesis = ')',
+        protected int $maxScale = 10
     ) {
     }
 
@@ -24,8 +25,9 @@ class Calculator
 
         $expression = "($expression)";
 
-        return $this->calculateParenthesis($expression);
+        $result = $this->calculateParenthesis($expression);
 
+        return $result === '0' ? '0' : rtrim($result, '0');
     }
 
     protected function validateExpression(string $expression): void
@@ -191,7 +193,7 @@ class Calculator
     {
         $leftNumberPosition = $operatorPosition - 1;
 
-        while (is_numeric($expression[$leftNumberPosition]) && $leftNumberPosition > 0) {
+        while ((is_numeric($expression[$leftNumberPosition]) || $expression[$leftNumberPosition] == '.') && $leftNumberPosition > 0) {
             $leftNumberPosition--;
         }
 
@@ -206,7 +208,7 @@ class Calculator
     {
         $rightNumberPosition = $operatorPosition + 1;
 
-        while ($rightNumberPosition < strlen($expression) && is_numeric($expression[$rightNumberPosition])) {
+        while ($rightNumberPosition < strlen($expression) && (is_numeric($expression[$rightNumberPosition]) || $expression[$rightNumberPosition] == '.')) {
             $rightNumberPosition++;
         }
 
@@ -215,15 +217,17 @@ class Calculator
 
     protected function calculateResult(string $leftNumber, string $rightNumber, string $operator): string
     {
+        $scale = $this->maxScale;
+
         switch ($operator) {
             case $this->plusSign:
-                return bcadd($leftNumber, $rightNumber);
+                return bcadd($leftNumber, $rightNumber, $scale);
             case $this->minusSign:
-                return bcsub($leftNumber, $rightNumber);
+                return bcsub($leftNumber, $rightNumber, $scale);
             case $this->multiplySign:
-                return bcmul($leftNumber, $rightNumber);
+                return bcmul($leftNumber, $rightNumber, $scale);
             case $this->divideSign:
-                return bcdiv($leftNumber, $rightNumber);
+                return bcdiv($leftNumber, $rightNumber, $scale);
         }
     }
 }

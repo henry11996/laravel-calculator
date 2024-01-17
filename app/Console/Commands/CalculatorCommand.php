@@ -36,7 +36,9 @@ class CalculatorCommand extends Command
             $expression = $this->ask('Enter expression');
 
             try {
-                $this->info((new Calculator())->calculate($expression));
+                $this->info(
+                    'Result: '.
+                    (new Calculator())->calculate($expression));
             } catch (\Throwable $th) {
                 $this->error($th->getMessage());
             }
