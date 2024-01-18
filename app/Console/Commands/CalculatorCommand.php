@@ -32,13 +32,15 @@ class CalculatorCommand extends Command
             $this->shouldKeepRunning = false;
         });
 
+        $maxScale = $this->ask('Enter max scale', 10);
+
         while ($this->shouldKeepRunning) {
             $expression = $this->ask('Enter expression');
 
             try {
                 $this->info(
                     'Result: '.
-                    (new Calculator())->calculate($expression));
+                    (new Calculator(maxScale: $maxScale))->calculate($expression));
             } catch (\Throwable $th) {
                 $this->error($th->getMessage());
             }
