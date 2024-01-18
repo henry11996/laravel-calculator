@@ -1,12 +1,11 @@
 ## Laravel Calculator
-### Quick Start
-#### First Time
+### Install And Start
 ```
-docker build -t laravel-calculator . && docker run -it --name laravel-calculator laravel-calculator 
+docker build -t laravel-calculator . && docker run -it --name laravel-calculator laravel-calculator --scale 10
 ```
-#### Else
+### Start
 ```
-docker run -it --name laravel-calculator laravel-calculator 
+docker start laravel-calculator && docker exec -it laravel-calculator php artisan app:calculator --scale 10
 ```
 ---
 ### Run Test

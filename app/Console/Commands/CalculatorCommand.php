@@ -12,7 +12,7 @@ class CalculatorCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:calculator';
+    protected $signature = 'app:calculator {--scale=10}';
 
     /**
      * The console command description.
@@ -26,13 +26,15 @@ class CalculatorCommand extends Command
      */
     public function handle()
     {
+        $maxScale = $this->option('scale');
+
         while (true) {
-            $expression = $this->ask('Enter expression. (Ctrl+D to exit)');
+            $expression = $this->ask("Enter expression. Scale: {$maxScale} (Ctrl+D to exit)");
 
             try {
                 $this->info(
                     'Result: '.
-                    (new Calculator())->calculate(strval($expression)));
+                    (new Calculator(maxScale: $maxScale))->calculate(strval($expression)));
             } catch (\Throwable $th) {
                 $this->error($th->getMessage());
             }

@@ -12,4 +12,6 @@ RUN curl -s https://getcomposer.org/installer | php
 
 RUN php composer.phar install --no-interaction
 
-CMD ["php", "artisan", "app:calculator"]
+ENTRYPOINT ["php", "artisan", "app:calculator"]
+
+CMD [ "--scale", "10" ]

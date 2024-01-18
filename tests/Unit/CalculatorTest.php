@@ -21,6 +21,8 @@ class CalculatorTest extends TestCase
     public static function validDataProvider()
     {
         return [
+            [20, '10+10'],
+            [10, '10'],
             [5, '+5'],
             [0.3333333333, '1/3'],
             [2, '1+1'],

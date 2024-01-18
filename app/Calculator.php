@@ -27,9 +27,8 @@ class Calculator
 
         $result = $this->runParenthesis($expression);
 
-        $result = rtrim($result, '0');
-
-        $result = rtrim($result, '.');
+        // remove trailing zeros, if any and remove trailing dot
+        $result = rtrim((strpos($result,".") !== false ? rtrim($result, "0") : $result),".");
 
         return empty($result) ? '0' : $result;
     }
