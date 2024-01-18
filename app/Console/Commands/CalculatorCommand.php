@@ -21,26 +21,18 @@ class CalculatorCommand extends Command
      */
     protected $description = 'Calculator';
 
-    private bool $shouldKeepRunning = true;
-
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->trap([SIGTERM, SIGQUIT], function (int $signal) {
-            $this->shouldKeepRunning = false;
-        });
-
-        $maxScale = $this->ask('Enter max scale', 10);
-
-        while ($this->shouldKeepRunning) {
-            $expression = $this->ask('Enter expression');
+        while (true) {
+            $expression = $this->ask('Enter expression. (Ctrl+D to exit)');
 
             try {
                 $this->info(
                     'Result: '.
-                    (new Calculator(maxScale: $maxScale))->calculate(strval($expression)));
+                    (new Calculator())->calculate(strval($expression)));
             } catch (\Throwable $th) {
                 $this->error($th->getMessage());
             }

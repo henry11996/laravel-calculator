@@ -25,9 +25,13 @@ class Calculator
 
         $expression = "($expression)";
 
-        $result = $this->calculateParenthesis($expression);
+        $result = $this->runParenthesis($expression);
 
-        return $result === '0' ? '0' : rtrim($result, '0');
+        $result = rtrim($result, '0');
+
+        $result = rtrim($result, '.');
+
+        return empty($result) ? '0' : $result;
     }
 
     protected function validateExpression(string $expression): void
@@ -52,12 +56,12 @@ class Calculator
         }
     }
 
-    protected function calculateParenthesis(string $expression): string
+    protected function runParenthesis(string $expression): string
     {
         for ($pos = 1; $pos < strlen($expression); $pos++) {
             $char = $expression[$pos];
             if ($char === $this->leftParenthesis) {
-                $expression = substr($expression, 0, $pos).$this->calculateParenthesis(substr($expression, $pos));
+                $expression = substr($expression, 0, $pos).$this->runParenthesis(substr($expression, $pos));
                 $pos -= 1;
             } elseif ($char === $this->rightParenthesis) {
                 $parenthesisExpression = substr($expression, 1, $pos - 1);
@@ -81,7 +85,7 @@ class Calculator
 
         $expression = $this->calculateAddAndSubtract($expression);
 
-        return empty($expression) ? '0' : $expression;
+        return $expression;
     }
 
     protected function calculateMultiplyAndDivide(string $expression): string
@@ -195,6 +199,10 @@ class Calculator
 
     protected function findLeftNumberPosition(string $expression, int $operatorPosition): int
     {
+        if ($operatorPosition === 0) {
+            return 0;
+        }
+
         $leftNumberPosition = $operatorPosition - 1;
 
         while ((is_numeric($expression[$leftNumberPosition]) || $expression[$leftNumberPosition] == '.') && $leftNumberPosition > 0) {
@@ -210,6 +218,10 @@ class Calculator
 
     protected function findRightNumberPosition(string $expression, int $operatorPosition): int
     {
+        if ($operatorPosition === strlen($expression) - 1) {
+            return strlen($expression);
+        }
+
         $rightNumberPosition = $operatorPosition + 1;
 
         while ($rightNumberPosition < strlen($expression) && (is_numeric($expression[$rightNumberPosition]) || $expression[$rightNumberPosition] == '.')) {
