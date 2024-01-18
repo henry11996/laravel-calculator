@@ -40,7 +40,7 @@ class CalculatorCommand extends Command
             try {
                 $this->info(
                     'Result: '.
-                    (new Calculator(maxScale: $maxScale))->calculate($expression));
+                    (new Calculator(maxScale: $maxScale))->calculate(strval($expression)));
             } catch (\Throwable $th) {
                 $this->error($th->getMessage());
             }

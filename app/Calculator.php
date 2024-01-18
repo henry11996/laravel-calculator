@@ -32,8 +32,12 @@ class Calculator
 
     protected function validateExpression(string $expression): void
     {
+        if (empty($expression)) {
+            throw new InvalidArgumentException('Empty expression');
+        }
+
         substr_count($expression, $this->leftParenthesis) !== substr_count($expression, $this->rightParenthesis)
-            && throw new InvalidArgumentException('Invalid expression');
+            && throw new InvalidArgumentException("Parenthesis don't match");
 
         //check if expression contains only valid characters
         $validCharacters = array_merge(
@@ -43,7 +47,7 @@ class Calculator
 
         foreach (str_split($expression) as $char) {
             if (! in_array($char, $validCharacters)) {
-                throw new InvalidArgumentException('Invalid expression');
+                throw new InvalidArgumentException("Invalid character: $char");
             }
         }
     }
